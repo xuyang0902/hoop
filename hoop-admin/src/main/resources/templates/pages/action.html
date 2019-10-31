@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{/layout/layout}">
+
+<div layout:fragment="~{content}">
+
+    <!-- 活动日志 -->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">全局事务详情 (<span th:text="${appName}"></span>)</h3>
+            </div>
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>TsId</th>
+                        <th>类型</th>
+                        <th>原子数</th>
+                        <th>状态</th>
+                        <th>开启时间</th>
+                        <th>TimeOut</th>
+                        <th>恢复次数</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
+                        <th>环境</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <td th:text="${activity.tsId}"></td>
+                        <td th:text="${activity.tsType}"></td>
+                        <td th:text="${activity.actionCount}"></td>
+                        <td th:text="${activity.state}"></td>
+                        <td th:text="${#dates.format(activity.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${activity.timeout}"></td>
+                        <td th:if="${activity.recoverCount>=50}">
+                            <span th:text="${activity.recoverCount}" class="label label-danger"/>
+                        </td>
+                        <td th:if="${activity.recoverCount<50}">
+                            <span th:text="${activity.recoverCount}"/>
+                        </td>
+                        <td th:text="${#dates.format(activity.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">2018-01-01 12:20:01
+                        </td>
+                        <td th:text="${#dates.format(activity.gmtModify,'yyyy-MM-dd HH:mm:ss')}">2018-01-01 12:20:10
+                        </td>
+                        <td th:text="${activity.env}">PROD</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+                <br/>
+
+                <div class="form-group">
+                    <label>全局分布式事务确认器</label>
+                    <textarea class="form-control" rows="1" th:text="${activity.resolverBean}" readonly></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>全局事务入参</label>
+                    <textarea class="form-control" rows="3" th:text="${activity.context}" readonly ></textarea>
+                </div>
+            </div>
+
+            <div class="box-header">
+                <h3 class="box-title">Branch</h3>
+            </div>
+            <div class="box-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>分支事务id</th>
+                        <th>分支信息</th>
+                        <th>状态</th>
+                        <th>分支事务一阶段提交参数</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="detail:${actionList}">
+                        <td th:text="${detail.branchId}"></td>
+                        <td>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="5" th:text="${detail.actionName}" readonly></textarea>
+                            </div>
+
+                        </td>
+                        <td th:text="${detail.state}"></td>
+                        <td >
+                            <div class="form-group">
+                                <textarea class="form-control" rows="5" th:text="${detail.context}" readonly></textarea>
+                            </div>
+                        </td>
+                        <td th:text="${#dates.format(detail.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">2018-01-01 12:20:01
+                        </td>
+                        <td th:text="${#dates.format(detail.gmtModify,'yyyy-MM-dd HH:mm:ss')}">2018-01-01 12:20:10
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+</html>

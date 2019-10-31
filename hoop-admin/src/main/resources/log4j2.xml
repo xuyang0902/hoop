@@ -1,0 +1,50 @@
+<Configuration status="INFO" monitorInterval="300">
+    <properties>
+        <property name="LOG_HOME">/data/www/logs/apps/hoop-admin/app</property>
+        <!-- 输出格式 -->
+        <property name="LOG_PATTERN">[%d{MMdd HH:mm:ss SSS} %-5p] [%t] %c{3} - %m%n</property>
+    </properties>
+    <appenders>
+        <Console name="CONSOLE" target="system_out">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+        <RollingFile name="I" fileName="${LOG_HOME}/info.log" filePattern="${LOG_HOME}/info-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+        <RollingFile name="W" fileName="${LOG_HOME}/warn.log" filePattern="${LOG_HOME}/warn-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+        <RollingFile name="E" fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/error-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </RollingFile>
+    </appenders>
+    <loggers>
+        <root level="info">
+            <appenderref ref="CONSOLE"/>
+            <appenderref ref="I"/>
+            <appenderref ref="W"/>
+            <appenderref ref="E"/>
+        </root>
+    </loggers>
+</Configuration>

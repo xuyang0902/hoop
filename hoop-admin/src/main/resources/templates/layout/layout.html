@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" type="image/x-icon" href="/resources/dist/img/hoop.ico">
+    <link th:replace="~{/layout/static}"/>
+    <title>HoopAdmin</title>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+        <div th:replace="~{/layout/header}"></div>
+        <div th:replace="~{/layout/left}"></div>
+        <div class="content-wrapper">
+            <div layout:fragment="~{content}"></div>
+        </div>
+        <div th:replace="~{/layout/bottom}"></div>
+    </div>
+</body>
+</html>

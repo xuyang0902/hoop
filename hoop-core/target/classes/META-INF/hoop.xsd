@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.tongbanjie.com/schema/hoop"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://www.tongbanjie.com/schema/hoop">
+
+
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.springframework.org/schema/beans"/>
+    <xsd:import namespace="http://www.springframework.org/schema/tool"/>
+
+
+    <xsd:annotation>
+        <xsd:documentation><![CDATA[ Namespace support for the hoop  ]]></xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="config">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+
+                    <xsd:attribute name="appName"
+                                   type="xsd:string"
+                                   default="hoop_sample">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                应用名称
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+
+                    <xsd:attribute name="beforTime"
+                                   type="xsd:string"
+                                   default="3">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                查询几分钟前的单据恢复
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+
+                    <xsd:attribute name="recoverTimeInterval"
+                                   type="xsd:integer"
+                                   default="3">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                单台机器恢复时间间隔
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+
+                    <xsd:attribute name="maxRecoverCount"
+                                   type="xsd:string"
+                                   default="1000">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                最大恢复次数 超过这个次数 hoop不再补偿
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+
+
+                    <xsd:attribute name="removeLog"
+                                   type="xsd:boolean"
+                                   default="true">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                是否移除事务单据，默认移除，刚上生产 可以调整为false，观察一段时间数据
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="bootstrap">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+
+
+                    <xsd:attribute name="storeModel"
+                                   type="xsd:string"
+                                   default="mysql">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                事务存储引擎模式
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

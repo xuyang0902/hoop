@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{/layout/layout}">
+
+<div layout:fragment="~{content}">
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">事务列表</h3>
+            </div>
+            <div class="box-body">
+
+                <div>
+                    <form action="/activity" method="get" id="searchForm">
+                        <table class="table table-bordered table-hover">
+                            <tr>
+                                <th>
+                                    <div>
+                                        <select class="form-control" name="appName">
+                                            <option value=""> -- 请选择 --</option>
+                                            <option th:selected="${app.id eq c.id}" th:each="c:${applist}"
+                                                    th:value="${c.appName}"
+                                                    th:text="${c.appName}">XX
+                                            </option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div>
+                                        <select class="form-control" name="status">
+                                            <option value="">全部</option>
+                                            <option value="U" th:selected="${status eq 'U'}">UnKnown</option>
+                                            <option value="I" th:selected="${status eq 'I'}">Init</option>
+                                            <option value="C" th:selected="${status eq 'C'}">Commit</option>
+                                            <option value="R" th:selected="${status eq 'R'}">Rollback</option>
+                                            <option value="F" th:selected="${status eq 'F'}">Finish</option>
+                                        </select>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div>
+                                        <button type="submit" class="btn btn-info">Search</button>
+                                    </div>
+                                </th>
+
+                                <input type="hidden" id="pageNo" name="pageNo" th:value="${page.indexPage}" ></input>
+
+                            </tr>
+
+                        </table>
+                    </form>
+
+                </div>
+
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>TsId</th>
+                        <th>类型</th>
+                        <th>原子数</th>
+                        <th>状态</th>
+                        <th>开启时间</th>
+                        <th>TimeOut</th>
+                        <th>恢复次数</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
+                        <th>环境</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="detail:${list}">
+                        <td th:text="${detail.tsId}"></td>
+                        <td th:text="${detail.tsType}"></td>
+                        <td>
+                            <a th:href="@{'/action/'+${detail.tsId} + '/' + ${appId}}"
+                               th:text="${detail.actionCount}"></a>
+                        </td>
+                        <td th:text="${detail.state}"></td>
+                        <td th:text="${#dates.format(detail.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${detail.timeout}"></td>
+                        <td th:if="${detail.recoverCount>=50}">
+                            <span th:text="${detail.recoverCount}" class="label label-danger"/>
+                        </td>
+                        <td th:if="${detail.recoverCount<50}">
+                            <span th:text="${detail.recoverCount}"/>
+                        </td>
+                        <td th:text="${#dates.format(detail.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">2018-01-01 12:20:01
+                        </td>
+                        <td th:text="${#dates.format(detail.gmtModify,'yyyy-MM-dd HH:mm:ss')}">2018-01-01 12:20:10
+                        </td>
+                        <td th:text="${detail.env}">PROD</td>
+                        <!--
+                        <td th:text="${detail.resolverBean}"></td>
+                        <td th:text="${detail.context}"></td>
+                        -->
+                    </tr>
+
+                    </tbody>
+                </table>
+
+                <!-- 分页部分start -->
+
+                <div class="row">
+
+                    <div class="col-sm-5" style="margin-top: 20px;" >
+                        总条数：<span th:text="${page.totalSize}"></span>&nbsp;&nbsp;
+                        总页数：<span th:text="${page.totalPage}"></span>&nbsp;&nbsp;
+                        当前页码：<span th:text="${page.indexPage}"></span>
+                    </div>
+                    <div class="col-sm-7">
+                        <div align="right">
+                            <ul class="pagination">
+                                <li class="paginate_button " th:class="${page.indexPage==1}?'disabled' : ''">
+                                    <a onclick=submitForm('1')>首页</a>
+                                </li>
+                                <li class="paginate_button " th:if="${page.indexPage-3>=1}">
+                                    <a th:onclick="'javascript:submitForm('+${page.indexPage-3}+')'"
+                                       th:text="${page.indexPage -3}">1</a>
+                                </li>
+                                <li class="paginate_button " th:if="${page.indexPage-2>=1}">
+                                    <a th:onclick="'javascript:submitForm('+${page.indexPage-2}+')'"
+                                       th:text="${page.indexPage -2}">1</a>
+                                </li>
+                                <li class="paginate_button " th:if="${page.indexPage-1>=1}">
+                                    <a th:onclick="'javascript:submitForm('+${page.indexPage-1}+')'"
+                                       th:text="${page.indexPage -1}">1</a>
+                                </li>
+                                <li class="paginate_button " th:if="${page.indexPage<=page.totalPage}">
+                                    <a th:onclick="'javascript:submitForm('+${page.indexPage}+')'"
+                                       th:text="${page.indexPage}">1</a>
+                                </li>
+                                <li class="paginate_button " th:if="${page.indexPage+1<=page.totalPage}">
+                                    <a th:onclick="'javascript:submitForm('+${page.indexPage+1}+')'"
+                                       th:text="${page.indexPage+1}">1</a>
+                                </li>
+                                <li class="paginate_button " th:if="${page.indexPage+2<=page.totalPage}">
+                                    <a th:onclick="'javascript:submitForm('+${page.indexPage+2}+')'"
+                                       th:text="${page.indexPage+2}">1</a>
+                                </li>
+                                <li class="paginate_button " th:if="${page.indexPage+3<=page.totalPage}">
+                                    <a th:onclick="'javascript:submitForm('+${page.indexPage+3}+')'"
+                                       th:text="${page.indexPage+3}">1</a>
+                                </li>
+                                <li class="paginate_button "
+                                    th:class="${page.indexPage==page.totalPage}?'disabled' : ''">
+                                    <a th:onclick="'javascript:submitForm('+${page.totalPage}+')'">尾页</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- 分页部分end -->
+
+            </div>
+        </div>
+    </section>
+</div>
+</html>
+
+
+<script>
+    function submitForm(pageNo) {
+        $("#pageNo").attr("value", pageNo);
+        $("#searchForm").submit();
+    }
+</script>

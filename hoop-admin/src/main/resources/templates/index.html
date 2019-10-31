@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{/layout/layout}">
+
+<div layout:fragment="~{content}">
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Applications</h3>
+            </div>
+            <div class="box-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>应用名称</th>
+                        <th>接入系统url</th>
+                        <th>创建时间</th>
+                        <th>修改时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="detail : ${list}">
+                        <td th:text="${detail.id}">1</td>
+                        <td th:text="${detail.appName}">tz-trade</td>
+                        <td>
+                            <table>
+                                <tr th:each="url : ${detail.urls}">
+                                    <td th:text="${url}">"http:192.168.1.1:8080/hoop/
+                                </tr>
+                            </table>
+                        </td>
+                        <td th:text="${#dates.format(detail.createTime,'yyyy-MM-dd HH:mm')}">2018-01-01 12:20:01
+                        </td>
+                        <td th:text="${#dates.format(detail.modifyTime,'yyyy-MM-dd HH:mm')}">2018-01-01 12:20:10
+                        </td>
+                        <td>
+                            <a th:href="@{'/updateApp/'+${detail.id}}">修改</a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+</html>

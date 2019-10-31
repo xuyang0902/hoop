@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="model.HoopApp">
+
+    <resultMap id="BaseResultMap" type="HoopApp">
+        <result column="id" property="id"/>
+        <result column="app_name" property="appName"/>
+        <result column="urls" property="urls"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        app_name,
+        urls,
+        create_time,
+        modify_time
+    </sql>
+
+    <select id="FIND_BY_ID" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        hoop_app
+        where
+        id = #{id}
+    </select>
+
+
+    <sql id="_sql_where">
+        <if test="id != null">
+            and id=#{id}
+        </if>
+        <if test="appName != null and appName != '' ">
+            and app_name=#{appName}
+        </if>
+    </sql>
+
+    <insert id="INSERT" parameterType="HoopApp" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO hoop_app (<include refid="Base_Column_List"/>)
+        VALUES(
+        #{id},
+        #{appName},
+        #{urls},
+        #{createTime},
+        #{modifyTime}
+        )
+    </insert>
+
+    <update id="UPDATE_BY_NAME" parameterType="HoopApp">
+        update
+        hoop_app
+        <set>
+            <if test="urls != null and urls != '' ">
+                urls=#{urls},
+            </if>
+            <if test="modifyTime != null">
+                modify_time=#{modifyTime}
+            </if>
+        </set>
+        where
+        app_name=#{appName}
+    </update>
+
+    <sql id="_select_limit">
+        <if test="offset != null and limit != null">
+            limit #{offset} , #{limit}
+        </if>
+    </sql>
+
+    <select id="QUERY" parameterType="map" resultMap="BaseResultMap">
+        select *
+        from
+        hoop_app
+        <where>
+            <trim prefix="" prefixOverrides="and" suffix="">
+                <include refid="_sql_where"/>
+            </trim>
+        </where>
+        ORDER BY ID ASC
+        <include refid="_select_limit"/>
+    </select>
+
+</mapper>

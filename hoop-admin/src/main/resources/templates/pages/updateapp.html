@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{/layout/layout}">
+
+<div layout:fragment="~{content}">
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- general form elements -->
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Update pplication</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="appname">AppName</label>
+                        <input readonly type="text" class="form-control" id="appName" placeholder="tz-trade" th:value="${hoopApp.appName}">
+                    </div>
+                    <div class="form-group">
+                        <label for="urls">Url</label>
+                        <input type="text" class="form-control" id="urls" th:value="${hoopApp.urls}"
+                               placeholder="http://192.168.1.110:8080/hoop/">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button id="updateApplication" type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+</html>
+
+
+<script>
+
+    $(function ($) {
+        var btn = $('#updateApplication');
+        btn.on('click', function () {
+            var appName = $.trim($('#appName').val());
+            var urls = $.trim($('#urls').val());
+            if (!appName) {
+                alert("AppName不能为空")
+                return false;
+            }
+            if (!urls) {
+                alert("Url不能为空")
+                return false;
+            }
+            jQuery.ajax({
+                url: "/app/update",
+                async: false,
+                type: "POST",
+                data: {
+                    "appName": appName,
+                    "urls": urls
+                },
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        alert("更新成功");
+                    } else {
+                        alert("更新失败");
+                    }
+                }
+            });
+        });
+    });
+</script>
